@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Earn Master Pro — Final (Updated)</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-1:#040714; --bg-2:#071428;
+  --card: rgba(255,255,255,0.03);
+  --muted:#9fb0c4;
+  --accent1:#6b5bff; --accent2:#00ffd5; --accent3:#ffd166;
+  --nav-h:56px; /* reduced nav height */
+}
+
+/* Reset */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:'Poppins',system-ui,Arial,sans-serif;background:linear-gradient(180deg,var(--bg-1),var(--bg-2));color:#eaf7f4;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit}
+
+/* App container */
+.app{width:420px;max-width:98%;height:92vh;margin:18px auto;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;background:
+  radial-gradient(700px 300px at 10% 10%, rgba(107,91,255,0.04), transparent),
+  radial-gradient(600px 260px at 90% 90%, rgba(0,255,213,0.02), transparent);
+  box-shadow:0 30px 80px rgba(0,0,0,0.7);position:relative}
+
+/* Content is scrollable and includes header (so header scrolls) */
+.content{padding:12px;overflow-y:auto;flex:1}
+
+/* Compact header inside scroll */
+.header{
+  display:flex;gap:10px;align-items:center;padding:10px;border-radius:12px;margin-bottom:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);border:1px solid rgba(255,255,255,0.02)
+}
+.avatar{width:54px;height:54px;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-weight:700;background:linear-gradient(135deg,var(--accent1),#ff416c);color:#04121a;font-family:'Montserrat',sans-serif;font-size:16px;box-shadow:0 10px 30px rgba(107,91,255,0.08)}
+.header .meta{display:flex;flex-direction:column}
+.header h2{margin:0;font-size:16px;font-weight:700}
+.header p{margin:4px 0 0 0;color:var(--muted);font-size:12px}
+
+/* Card */
+.card{background:var(--card);border-radius:12px;padding:12px;margin-bottom:12px;border:1px solid rgba(255,255,255,0.03);backdrop-filter: blur(6px)}
+.small{font-size:12px;color:var(--muted)}
+.label{font-size:12px;color:var(--muted);margin-bottom:6px}
+.big{font-weight:700;font-size:20px}
+
+/* balance row */
+.balance-row{display:flex;gap:8px}
+.balance-card{flex:1;padding:10px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.005));display:flex;flex-direction:column;gap:8px}
+.icon-round{width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,0.02);display:flex;align-items:center;justify-content:center}
+
+/* How to work */
+.how-list{margin:10px 0 0 16px;color:var(--muted);font-size:13px;line-height:1.45}
+
+/* referral */
+.ref-row{display:flex;flex-direction:column;gap:8px}
+.ref-input{display:flex;gap:8px;align-items:center}
+.ref-input input{flex:1;padding:10px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.03);color:#fff;font-size:14px}
+.ref-actions{display:flex;gap:12px;justify-content:center}
+
+/* 3D button */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 12px;border-radius:12px;border:0;cursor:pointer;font-weight:700;color:#04121a;
+  background:linear-gradient(90deg,var(--accent2),var(--accent1));box-shadow:0 14px 44px rgba(107,91,255,0.12), inset 0 -4px 0 rgba(0,0,0,0.06);transition:transform .12s,box-shadow .12s;transform:translateY(0);
+}
+.btn.small{padding:8px 10px;font-size:13px;border-radius:10px}
+.btn.ghost{background:transparent;color:var(--accent2);border:1px solid rgba(255,255,255,0.03);box-shadow:none}
+.btn:active{transform:translateY(3px);box-shadow:0 8px 20px rgba(0,0,0,0.35)}
+.btn:hover{transform:translateY(-3px);box-shadow:0 22px 60px rgba(107,91,255,0.16)}
+
+/* Tasks */
+.task{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01),transparent);margin-bottom:8px}
+.task .left{display:flex;flex-direction:column}
+.task .title{font-weight:700}
+.task .desc{color:var(--muted);font-size:13px}
+
+/* Wheel: golden board with red dividers */
+/* outer smaller radius to leave more central space */
+.wheel-wrap{display:flex;flex-direction:column;align-items:center;gap:12px}
+.wheel-outer{width:280px;height:280px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;background: radial-gradient(circle at 30% 30%, #fff9d1 0%, #ffec8a 15%, #f5d25a 45%, #d6a803 100%);box-shadow:0 18px 44px rgba(0,0,0,0.28), inset 0 -8px 22px rgba(0,0,0,0.12);border:6px solid rgba(0,0,0,0.06)}
+.wheel{width:80%;height:80%;border-radius:50%;position:relative;overflow:visible;transform:rotate(0deg);transition:transform 0s}
+.segment{position:absolute;left:50%;top:50%;transform-origin:0 0;display:flex;align-items:center;justify-content:flex-start;padding-left:20px;font-weight:700;font-size:16px;color:#04121a;border-radius:4px}
+.divider{position:absolute;left:50%;top:50%;width:3px;height:46%;background:#d83b3b;transform-origin:0 0;}
+
+/* center */
+.center-btn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:84px;height:84px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#fff,#f6f6f6);font-weight:800;color:#04121a;box-shadow:0 10px 30px rgba(0,0,0,0.12)}
+
+/* indicator arrow on top */
+.indicator{position:absolute;top:-16px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-bottom:18px solid #ff6b6b;filter: drop-shadow(0 4px 8px rgba(0,0,0,0.18))}
+
+/* Withdraw */
+.fancy{position:relative;margin-top:10px}
+.fancy input{width:100%;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:#fff}
+.fancy label{position:absolute;left:12px;top:10px;color:var(--muted);transition:all .14s;pointer-events:none}
+.fancy input:focus + label, .fancy input:not(:placeholder-shown)+label{transform:translateY(-12px);font-size:12px;color:var(--accent2)}
+
+/* methods */
+.methods{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.method{display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);cursor:pointer;min-width:64px;text-align:center;box-shadow:0 8px 18px rgba(0,0,0,0.22)}
+.method.selected{outline:2px solid rgba(0,255,213,0.06);box-shadow:0 16px 44px rgba(0,255,213,0.03)}
+
+/* support actions + developer */
+.support-actions{display:flex;flex-direction:column;gap:8px}
+.support-actions a{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#04121a;font-weight:700}
+.dev-btn{display:block;margin-top:10px;padding:10px;border-radius:12px;background:linear-gradient(90deg,#ffffff0f,#fff9d11c);text-align:center;color:#fff;font-size:13px;font-weight:700;box-shadow:0 12px 36px rgba(0,0,0,0.25);}
+
+/* bottom nav fixed & smaller */
+.bottom-nav{height:var(--nav-h);padding:6px 10px;background:linear-gradient(180deg,transparent, rgba(4,6,10,0.95));display:flex;gap:6px;align-items:center;justify-content:space-between;border-top:1px solid rgba(255,255,255,0.02);position:sticky;bottom:0}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;justify-content:center;border-radius:12px;padding:6px;border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:12px;font-weight:700}
+.nav-btn svg{width:18px;height:18px}
+.nav-btn.active{background:linear-gradient(90deg,var(--accent2),var(--accent1));color:#04121a;box-shadow:0 12px 36px rgba(107,91,255,0.12)}
+
+/* small scrollbar */
+.content::-webkit-scrollbar{width:8px}
+.content::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.03);border-radius:8px}
+@media(max-width:440px){ .app{width:100%;height:100vh;border-radius:0} .wheel-outer{width:240px;height:240px} .avatar{width:48px;height:48px} }
+</style>
+</head>
+<body>
+<div class="app" role="application" aria-label="Earn Master Pro">
+
+  <!-- CONTENT (scrollable) includes header so header scrolls) -->
+  <div class="content" id="content">
+
+    <!-- Compact Header (scrollable) -->
+    <div class="header" id="header">
+      <div class="avatar" id="avatar-el"><span id="avatar-initials">EM</span></div>
+      <div class="meta">
+        <h2 id="display-username">@guest</h2>
+        <p class="small">Earning • Watch ads • Share referrals</p>
+      </div>
+    </div>
+
+    <!-- HOME -->
+    <section id="home" class="card">
+      <div class="balance-row">
+        <div class="balance-card">
+          <div style="display:flex;gap:10px;align-items:center">
+            <div class="icon-round" aria-hidden>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v20" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <div class="label">Balance</div>
+              <div class="big" id="balance">0 pts</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="balance-card">
+          <div class="label">Watched Ads</div>
+          <div style="font-weight:700;font-size:16px" id="watched">0</div>
+          <div style="height:6px"></div>
+          <div class="label">Total Referrals</div>
+          <div style="font-weight:700;font-size:16px" id="referrals">0</div>
+        </div>
+      </div>
+
+      <div style="height:10px"></div>
+
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="font-weight:800">How to work</div>
+          <div class="small">Note</div>
+        </div>
+        <ul class="how-list">
+          <li>1. Watch 30 ads from the Task page every day</li>
+          <li>2. Earn by sharing with your friends using referral</li>
+          <li>3. Withdraw only after earning $5 / 1000 pts</li>
+          <li>Contact support for any problem</li>
+        </ul>
+      </div>
+
+      <div class="card ref-row">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="font-weight:800">Earn 100 Points per Referral 💎</div>
+          <div class="small">Credited when they join</div>
+        </div>
+
+        <div class="ref-input">
+          <input id="ref-input" readonly />
+        </div>
+
+        <div class="ref-actions">
+          <button class="btn small" id="copy-ref-btn">Copy Link</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TASKS -->
+    <section id="tasks" class="card" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div class="small">Daily Tasks</div>
+          <div style="font-weight:800;font-size:15px">Complete tasks to earn points</div>
+        </div>
+        <div class="small">Streak</div>
+      </div>
+
+      <div style="height:10px"></div>
+
+      <div id="task-list"></div>
+    </section>
+
+    <!-- SPIN -->
+    <section id="spin" class="card" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div class="small">Spin Wheel</div>
+          <div style="font-weight:800">Spin — wheel then watch ad to claim reward</div>
+        </div>
+        <div class="small">Spin rules applied</div>
+      </div>
+
+      <div style="height:10px"></div>
+
+      <div class="wheel-wrap">
+        <div class="indicator" id="indicator" title="Result pointer"></div>
+        <div class="wheel-outer" aria-hidden="true">
+          <div class="wheel" id="wheel"></div>
+          <div class="center-btn" id="wheel-center">SPIN</div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <button class="btn" id="spin-now">Spin Now</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- WITHDRAW -->
+    <section id="withdraw" class="card" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div class="small">Withdraw</div>
+          <div style="font-weight:800">Request payout from your points</div>
+        </div>
+        <div class="small">Min: 1000 pts = $5</div>
+      </div>
+
+      <div style="height:10px"></div>
+
+      <div class="card">
+        <div class="small">Balance</div>
+        <div style="font-weight:800" id="withdraw-balance">0 pts</div>
+
+        <div class="small" style="margin-top:10px">Choose payment method</div>
+        <div id="methods" class="methods"></div>
+
+        <div class="fancy">
+          <input id="withdraw-pts" type="number" placeholder=" " min="1000" />
+          <label>Enter points to withdraw (min 1000 pts)</label>
+        </div>
+
+        <div class="fancy">
+          <input id="withdraw-acc" type="text" placeholder=" " />
+          <label>Enter account/wallet</label>
+        </div>
+
+        <div style="margin-top:10px;display:flex;gap:10px;align-items:center">
+          <button class="btn" id="withdraw-send">Send Withdraw Request</button>
+          <div id="withdraw-msg" class="small" style="color:var(--muted)"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUPPORT -->
+    <section id="support" class="card" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div class="small">Support</div>
+          <div style="font-weight:800">Get help & announcements</div>
+        </div>
+      </div>
+
+      <div style="height:10px"></div>
+
+      <div class="support-actions">
+        <a href="https://t.me/earnmaster_pro" target="_blank" rel="noreferrer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 12l9-7 9 7-9 7-9-7z" stroke="#04121a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Join Channel
+        </a>
+        <a href="https://t.me/earnmasterprosupport" target="_blank" rel="noreferrer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="#04121a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Join Support Group
+        </a>
+      </div>
+
+      <a class="dev-btn" href="https://t.me/bestearningmethod" target="_blank" rel="noreferrer">Developer • Telegram</a>
+    </section>
+
+  </div> <!-- end content -->
+
+  <!-- Bottom nav fixed -->
+  <div class="bottom-nav" role="navigation" aria-label="Main navigation">
+    <button class="nav-btn active" data-page="home" aria-label="Home">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M3 12l9-7 9 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div>Home</div>
+    </button>
+
+    <button class="nav-btn" data-page="tasks" aria-label="Tasks">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div>Tasks</div>
+    </button>
+
+    <button class="nav-btn" data-page="spin" aria-label="Spin">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2a10 10 0 1 0 10 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 2v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div>Spin</div>
+    </button>
+
+    <button class="nav-btn" data-page="withdraw" aria-label="Withdraw">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M20 12v6a2 2 0 0 1-2 2H6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10h8M12 10v8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div>Withdraw</div>
+    </button>
+
+    <button class="nav-btn" data-page="support" aria-label="Support">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div>Support</div>
+    </button>
+  </div>
+
+</div>
+
+<!-- Monetag SDK (kept as requested) -->
+<script async src="//libtl.com/sdk.js" data-zone="10084015" data-sdk="show_10084015"></script>
+
+<script>
+/* Updated behavior script:
+   - header now inside scroll (.content) so it scrolls
+   - smaller header and bottom nav
+   - spin segments show only numbers
+   - WebMoney added to withdraw methods
+   - Developer button label updated
+*/
+
+const ADMIN_CHAT = 7694112804;
+const BOT_TOKEN = "8200480620:AAH6Uk1RcapxrE2TAihXxKKdWJ0tN0CtOpw";
+let monetagReady = false;
+
+/* state */
+let state = {
+  points: parseFloat(localStorage.getItem('emp_points')) || 0,
+  watchedAds: parseInt(localStorage.getItem('emp_watched')) || 0,
+  totalSpins: parseInt(localStorage.getItem('emp_totalSpins')) || 0,
+  refCode: localStorage.getItem('emp_ref') || null,
+  referrals: parseInt(localStorage.getItem('emp_referrals')) || 0,
+  tasksDone: JSON.parse(localStorage.getItem('emp_tasks') || '{}'),
+  adWindowStart: parseInt(localStorage.getItem('emp_adWindowStart')) || 0,
+  adWindowCount: parseInt(localStorage.getItem('emp_adWindowCount')) || 0
+};
+function saveState(){ localStorage.setItem('emp_points', state.points.toFixed(2)); localStorage.setItem('emp_watched', state.watchedAds); localStorage.setItem('emp_totalSpins', state.totalSpins); localStorage.setItem('emp_ref', state.refCode); localStorage.setItem('emp_referrals', state.referrals); localStorage.setItem('emp_tasks', JSON.stringify(state.tasksDone)); localStorage.setItem('emp_adWindowStart', state.adWindowStart); localStorage.setItem('emp_adWindowCount', state.adWindowCount); }
+
+/* DOM refs */
+const displayUsername = document.getElementById('display-username');
+const balanceEl = document.getElementById('balance');
+const watchedEl = document.getElementById('watched');
+const referralsEl = document.getElementById('referrals');
+const refInput = document.getElementById('ref-input');
+const copyRefBtn = document.getElementById('copy-ref-btn');
+const taskList = document.getElementById('task-list');
+const wheel = document.getElementById('wheel');
+const spinNowBtn = document.getElementById('spin-now');
+const withdrawBalanceEl = document.getElementById('withdraw-balance');
+const methodsWrap = document.getElementById('methods');
+const withdrawSend = document.getElementById('withdraw-send');
+const withdrawMsg = document.getElementById('withdraw-msg');
+
+const navBtns = document.querySelectorAll('.nav-btn');
+const pages = {
+  home: document.getElementById('home'),
+  tasks: document.getElementById('tasks'),
+  spin: document.getElementById('spin'),
+  withdraw: document.getElementById('withdraw'),
+  support: document.getElementById('support')
+};
+
+/* Monetag ready poll */
+function checkMonetag(){ if(typeof window.show_10084015 === 'function'){ monetagReady=true; console.log('Monetag ready'); } else setTimeout(checkMonetag,700); }
+
+/* generate referral link */
+function genRef(){
+  if(!state.refCode){ state.refCode = 'EMP-'+Math.random().toString(36).slice(2,9).toUpperCase(); saveState(); }
+  const botName = 'earnmasterprobot';
+  return `https://t.me/${botName}?start=${encodeURIComponent(state.refCode)}`;
+}
+
+/* update UI */
+function updateUI(){
+  balanceEl.textContent = `${state.points.toFixed(2)} pts`;
+  watchedEl.textContent = state.watchedAds;
+  referralsEl.textContent = state.referrals;
+  withdrawBalanceEl.textContent = `${state.points.toFixed(2)} pts`;
+  refInput.value = genRef();
+}
+document.addEventListener('DOMContentLoaded', ()=>{ checkMonetag(); if(!state.refCode) genRef(); updateUI(); renderTasks(); buildWheel(); renderMethods(); checkReferralJoin(); });
+
+/* nav */
+navBtns.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    navBtns.forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+    const p = btn.dataset.page;
+    for(const k in pages) pages[k].style.display = (k===p)?'block':'none';
+    document.querySelector('.content').scrollTop = 0;
+  });
+});
+
+/* ad window limiter */
+function canWatchAdNow(){
+  const TWO_H = 2*60*60*1000;
+  const now = Date.now();
+  if(!state.adWindowStart || now - state.adWindowStart > TWO_H){
+    state.adWindowStart = now; state.adWindowCount = 0; saveState();
+  }
+  return state.adWindowCount < 10;
+}
+function recordAdInWindow(){ state.adWindowCount = (state.adWindowCount||0)+1; saveState(); }
+
+/* TASKS */
+const TASKS = [
+  {id:'t_watch', title:'Watch Rewarded Ad', desc:'Watch an ad to get 20 pts (max 10 ads per 2 hrs)', pts:20, type:'ad'},
+  {id:'t_channel', title:'Visit Channel', desc:'Visit Telegram channel (one-time)', pts:5, type:'link', url:'https://t.me/earnmaster_pro'},
+  {id:'t_group', title:'Join Support Group', desc:'Join Telegram support group (one-time)', pts:10, type:'link', url:'https://t.me/earnmasterprosupport'},
+  {id:'t_checkin', title:'Daily Check-in', desc:'Claim daily check-in (once/day)', pts:5, type:'claim'},
+  {id:'t_share', title:'Share Referral', desc:'Copy referral link (earn 100 pts when someone joins)', pts:100, type:'share'}
+];
+
+function renderTasks(){
+  taskList.innerHTML='';
+  TASKS.forEach(t=>{
+    const done = !!state.tasksDone[t.id];
+    const wrap = document.createElement('div'); wrap.className='task';
+    let rightHtml = `<div class="small">${t.pts} pts</div>`;
+    if(t.type === 'share'){
+      rightHtml += `<div style="margin-top:6px"><button class="btn small" data-action="copy" data-id="${t.id}" ${done?'disabled':''}>Copy</button></div>`;
+    } else {
+      rightHtml += `<div style="margin-top:6px"><button class="btn small" data-action="do" data-id="${t.id}" ${done?'disabled':''}>${done?'Done':'Do'}</button></div>`;
+    }
+    wrap.innerHTML = `<div class="left"><div class="title">${t.title}</div><div class="desc">${t.desc}</div></div><div style="text-align:right">${rightHtml}</div>`;
+    taskList.appendChild(wrap);
+  });
+
+  taskList.querySelectorAll('button').forEach(btn=>{
+    btn.addEventListener('click', async (e)=>{
+      const id = e.currentTarget.dataset.id; const action = e.currentTarget.dataset.action;
+      const task = TASKS.find(x=>x.id===id);
+      if(!task) return;
+      if(state.tasksDone[id]){ alert('Task already completed'); return; }
+
+      if(task.type === 'ad'){
+        if(!canWatchAdNow()){ const next = new Date((state.adWindowStart||0)+(2*60*60*1000)); alert(`Ad limit reached. Window resets at ${next.toLocaleTimeString()}`); return; }
+        if(!monetagReady){ alert('Ad service loading. Try again shortly.'); return; }
+        try{
+          await show_10084015('pop');
+          state.points = parseFloat((state.points + task.pts).toFixed(2));
+          state.watchedAds += 1; recordAdInWindow(); state.tasksDone[id]=true; saveState(); updateUI(); renderTasks(); alert(`+${task.pts} pts`);
+        }catch(err){ console.warn(err); alert('Ad failed or closed — no reward.'); }
+      } else if(task.type === 'link'){
+        window.open(task.url,'_blank');
+        state.points = parseFloat((state.points + task.pts).toFixed(2));
+        state.tasksDone[id]=true; saveState(); updateUI(); renderTasks(); alert(`+${task.pts} pts`);
+      } else if(task.type === 'claim'){
+        const key = 'daily_'+new Date().toISOString().slice(0,10);
+        if(localStorage.getItem(key)){ alert('Daily check-in already claimed today'); return; }
+        localStorage.setItem(key,'1'); state.points = parseFloat((state.points + task.pts).toFixed(2)); state.tasksDone[id]=true; saveState(); updateUI(); renderTasks(); alert(`Daily +${task.pts} pts`);
+      } else if(task.type === 'share'){
+        navigator.clipboard.writeText(refInput.value).then(()=>{ alert('Referral link copied'); state.tasksDone[id]=true; saveState(); renderTasks(); });
+      }
+    });
+  });
+}
+
+/* copy referral */
+copyRefBtn.addEventListener('click', ()=>{
+  const link = refInput.value || genRef();
+  navigator.clipboard.writeText(link).then(()=>{ copyRefBtn.textContent='Copied'; setTimeout(()=>copyRefBtn.textContent='Copy Link',1200); });
+});
+
+/* Wheel building (10 segments) - only numbers shown */
+const SEGMENTS = [0.5,1,1,2,5,10,20,30,40,50];
+function buildWheel(){
+  const n = SEGMENTS.length;
+  wheel.innerHTML='';
+  for(let i=0;i<n;i++){
+    const s = document.createElement('div'); s.className='segment';
+    const angle = (360/n)*i;
+    s.style.transform = `rotate(${angle}deg) translate(-50%,-100%)`;
+    s.style.width = '48%'; s.style.height = '48%'; s.style.left='50%'; s.style.top='50%';
+    s.style.paddingLeft='18px';
+    s.style.fontSize = '16px';
+    s.innerHTML = `<div style="transform: rotate(${(360/n)/2}deg)">${Math.round(SEGMENTS[i])}</div>`;
+    wheel.appendChild(s);
+    const d = document.createElement('div'); d.className='divider';
+    d.style.transform = `rotate(${angle}deg) translate(-50%,-100%)`;
+    wheel.appendChild(d);
+  }
+}
+
+/* weighted index picker (as before) */
+function pickSegmentIndex(){
+  const weights = [2, 30, 30, 6, 8, 4, 2, 1, 1, 1];
+  const total = weights.reduce((a,b)=>a+b,0);
+  let r = Math.random()*total;
+  for(let i=0;i<weights.length;i++){ r -= weights[i]; if(r<=0) return i; }
+  return weights.length-1;
+}
+
+/* spin behavior */
+let spinning=false;
+spinNowBtn.addEventListener('click', async ()=>{
+  if(spinning) return;
+  if(!canWatchAdNow()){ const next = new Date((state.adWindowStart||0)+(2*60*60*1000)); alert(`Ad limit reached. Window resets at ${next.toLocaleTimeString()}`); return; }
+  spinning=true; spinNowBtn.disabled=true;
+  const idx = pickSegmentIndex();
+  const slices = SEGMENTS.length;
+  const baseRot = 360 * 6;
+  const offset = (360/slices) * idx + (360/slices)/2;
+  const finalRot = baseRot + 360 - offset;
+  wheel.style.transition = 'transform 4.8s cubic-bezier(.25,.8,.25,1)';
+  wheel.style.transform = `rotate(${finalRot}deg)`;
+  setTimeout(async ()=>{
+    if(!monetagReady){ alert('Ad service not ready. No reward credited.'); resetWheel(); spinning=false; spinNowBtn.disabled=false; return; }
+    try{
+      await show_10084015('pop');
+      const reward = SEGMENTS[idx];
+      state.points = parseFloat((state.points + reward).toFixed(2));
+      state.watchedAds += 1; recordAdInWindow();
+      state.totalSpins = (state.totalSpins||0) + 1;
+      if(state.totalSpins % 100 === 0){
+        state.points = parseFloat((state.points + 50).toFixed(2));
+        alert('100 spins milestone — bonus +50 pts awarded!');
+      }
+      saveState(); updateUI();
+      alert(`You won ${reward} pts (credited after ad).`);
+    }catch(err){
+      console.warn(err); alert('Ad failed or closed — reward not credited.');
+    }finally{
+      setTimeout(()=>{ resetWheel(); spinning=false; spinNowBtn.disabled=false; }, 300);
+    }
+  }, 5200);
+});
+function resetWheel(){ wheel.style.transition = ''; wheel.style.transform = 'rotate(0deg)'; }
+
+/* METHODS (add WebMoney) */
+const METHODS = [
+  {id:'bkash', label:'Bkash', icon:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="3" stroke="#ff4b81" stroke-width="1.6"/></svg>'},
+  {id:'usdt', label:'USDT', icon:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#00b894" stroke-width="1.6"/></svg>'},
+  {id:'btc', label:'Bitcoin', icon:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#f7931a" stroke-width="1.6"/></svg>'},
+  {id:'webm', label:'WebMoney', icon:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="#4aa3ff" stroke-width="1.6"/></svg>'}
+];
+let selectedMethod = METHODS[0].id;
+function renderMethods(){ methodsWrap.innerHTML=''; METHODS.forEach(m=>{ const el = document.createElement('div'); el.className='method'; el.dataset.id=m.id; el.innerHTML = `${m.icon}<div style="font-weight:700">${m.label}</div>`; if(m.id === selectedMethod) el.classList.add('selected'); el.addEventListener('click', ()=>{ selectedMethod = m.id; document.querySelectorAll('.method').forEach(x=>x.classList.remove('selected')); el.classList.add('selected'); }); methodsWrap.appendChild(el); }); }
+
+/* withdraw send */
+withdrawSend.addEventListener('click', async ()=>{
+  withdrawMsg.textContent='';
+  const pts = parseInt(document.getElementById('withdraw-pts').value || 0);
+  const acc = document.getElementById('withdraw-acc').value.trim();
+  if(!pts || pts < 1000){ withdrawMsg.textContent = `Minimum 1000 pts required.`; return; }
+  if(pts > Math.floor(state.points)){ withdrawMsg.textContent = 'Insufficient balance.'; return; }
+  if(!acc){ withdrawMsg.textContent = 'Enter account/wallet.'; return; }
+  state.points = parseFloat((state.points - pts).toFixed(2)); saveState(); updateUI();
+  const msg = `Withdraw Request\nAmount: ${pts} pts\nMethod: ${selectedMethod}\nAccount: ${acc}`;
+  try{ await fetch(`https://api.telegram.org/bot${encodeURIComponent(BOT_TOKEN)}/sendMessage?chat_id=${ADMIN_CHAT}&text=${encodeURIComponent(msg)}`); withdrawMsg.textContent = 'Request sent to admin.'; }catch(e){ withdrawMsg.textContent = 'Network error sending request.'; }
+  document.getElementById('withdraw-pts').value=''; document.getElementById('withdraw-acc').value='';
+});
+
+/* Referral join detection (demo) */
+function checkReferralJoin(){
+  const params = new URLSearchParams(location.search);
+  const ref = params.get('ref') || params.get('start');
+  if(ref && (!state.refCode || ref !== state.refCode)){
+    const key = 'joined_'+ref;
+    if(!localStorage.getItem(key)){
+      localStorage.setItem(key,'1');
+      fetch(`https://api.telegram.org/bot${encodeURIComponent(BOT_TOKEN)}/sendMessage?chat_id=${ADMIN_CHAT}&text=${encodeURIComponent('Referral join: '+ref+' '+location.href)}`).catch(()=>{});
+      if(ref === state.refCode || decodeURIComponent(ref) === state.refCode){
+        state.referrals = (state.referrals||0) + 1;
+        state.points = parseFloat((state.points + 100).toFixed(2));
+        saveState(); updateUI();
+      }
+    }
+  }
+}
+
+/* initial build */
+document.addEventListener('DOMContentLoaded', ()=>{
+  if(!state.refCode) genRef();
+  refInput.value = genRef();
+  updateUI(); renderTasks(); buildWheel(); renderMethods(); checkMonetag();
+});
+
+/* debug helpers */
+window.EarnMasterPro = { state: ()=>state, reset: ()=>{ localStorage.clear(); location.reload(); } };
+</script>
+</body>
+</html>
